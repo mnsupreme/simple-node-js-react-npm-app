@@ -14,6 +14,14 @@ pipeline {
                 sh 'npm install'
             }
         }
+        stage('SonarQube analysis') {
+            def scannerHome = tool 'SonarScanner 4.2.0.1873';
+            steps{
+                withSonarQubeEnv('sonar') { 
+                    sh "${scannerHome}/bin/sonar-scanner"
+                }
+            }
+        }
         stage('Test') {
             steps {
                 sh './jenkins/scripts/test.sh'
