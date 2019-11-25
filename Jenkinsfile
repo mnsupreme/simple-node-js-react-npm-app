@@ -7,6 +7,7 @@ pipeline {
     }
     environment { 
         CI = 'true'
+        scannerHome = tool 'test'
     }
     stages {
         stage('Build') {
@@ -15,7 +16,6 @@ pipeline {
             }
         }
         stage('SonarQube analysis') {
-            def scannerHome = tool 'SonarScanner 4.2.0.1873';
             steps{
                 withSonarQubeEnv('sonar') { 
                     sh "${scannerHome}/bin/sonar-scanner"
