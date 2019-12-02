@@ -1,24 +1,18 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:6-alpine'
-            args '-p 3000:3000'
-        }
-    }
+    agent none
     environment { 
         CI = 'true'
     }
     stages {
         stage('Build') {
+            agent { docker 'node:6-alpine' }
             steps {
                 sh 'npm install'
             }
         }
         stage('SonarQube analysis') {
             agent{ 
-                docker { 
-                    image 'openjdk:12-alpine' 
-                } 
+                docker 'openjdk:12-alpine' 
             }
             steps{
                 script {
@@ -31,6 +25,7 @@ pipeline {
             }
         }
         stage('Test') {
+            agent { docker 'node:6-alpine' }
             steps {
                 sh './jenkins/scripts/test.sh'
             }
