@@ -1,31 +1,34 @@
 pipeline {
-    agent none
+    agent {
+        docker {
+            image 'node:6-alpine'
+            args '-p 3000:3000'
+        }
+    }
     environment { 
         CI = 'true'
+        scannerHome = tool 'test'
     }
     stages {
         stage('Build') {
-            agent { docker 'node:6-alpine' }
             steps {
                 sh 'npm install'
             }
         }
         stage('SonarQube analysis') {
             agent{ 
-                docker 'openjdk:12-alpine' 
+                docker { 
+                    image 'openjdk:12-alpine' 
+                } 
             }
             steps{
-                script {
-                    scannerHome = tool 'SonarQube Scanner';
-
-                }
+                sh 'echo $JAVA_HOME'
                 withSonarQubeEnv('sonar') { 
                     sh "${scannerHome}/bin/sonar-scanner"
                 }
             }
         }
         stage('Test') {
-            agent { docker 'node:6-alpine' }
             steps {
                 sh './jenkins/scripts/test.sh'
             }
