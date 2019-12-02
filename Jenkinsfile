@@ -1,21 +1,25 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:6-alpine'
-            args '-p 3000:3000'
-        }
-    }
+    agent none
     environment { 
         CI = 'true'
         scannerHome = tool 'test'
     }
     stages {
         stage('Build') {
+            agent {
+                docker {
+                    image 'node:6-alpine'
+                    args '-p 3000:3000'
+                }
+            }
             steps {
                 sh 'npm install'
             }
         }
         stage('SonarQube analysis') {
+            agent{ docker { 
+                image 'openjdk:12-alpine' } 
+            }
             steps{
                 withSonarQubeEnv('sonar') { 
                     sh "${scannerHome}/bin/sonar-scanner"
@@ -23,11 +27,23 @@ pipeline {
             }
         }
         stage('Test') {
+            agent {
+                docker {
+                    image 'node:6-alpine'
+                    args '-p 3000:3000'
+                }
+            }
             steps {
                 sh './jenkins/scripts/test.sh'
             }
         }
-        stage('Deliver') { 
+        stage('Deliver') {
+            agent {
+                docker {
+                    image 'node:6-alpine'
+                    args '-p 3000:3000'
+                }
+            } 
             steps {
                 sh './jenkins/scripts/deliver.sh' 
                 input message: 'Finished using the web site? (Click "Proceed" to continue)' 
