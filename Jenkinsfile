@@ -18,7 +18,8 @@ pipeline {
         stage('SonarQube analysis') {
             agent{ 
                 docker { 
-                    image 'openjdk' 
+                    image 'openjdk'
+                    args '--privileged' 
                 } 
             }
             steps{
