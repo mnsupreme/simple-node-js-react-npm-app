@@ -1,16 +1,12 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:6-alpine'
-            args '-p 3000:3000'
-        }
-    }
+    agent none
     environment { 
         CI = 'true'
         scannerHome = tool 'test'
     }
     stages {
         stage('Build') {
+            agent { docker 'node:6-alpine' }
             steps {
                 sh 'npm install'
             }
@@ -30,11 +26,13 @@ pipeline {
             }
         }
         stage('Test') {
+            agent { docker 'node:6-alpine' }
             steps {
                 sh './jenkins/scripts/test.sh'
             }
         }
-        stage('Deliver') { 
+        stage('Deliver') {
+            agent { docker 'node:6-alpine' } 
             steps {
                 sh './jenkins/scripts/deliver.sh' 
                 input message: 'Finished using the web site? (Click "Proceed" to continue)' 
