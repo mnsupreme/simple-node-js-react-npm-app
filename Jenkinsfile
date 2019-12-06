@@ -16,12 +16,6 @@ pipeline {
             }
         }
         stage('SonarQube analysis') {
-            agent{ 
-                docker { 
-                    image 'openjdk'
-                    args '--privileged' 
-                } 
-            }
             steps{
                 sh 'echo $JAVA_HOME'
                 withSonarQubeEnv('sonar') { 
