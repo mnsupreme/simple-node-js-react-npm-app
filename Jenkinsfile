@@ -2,7 +2,6 @@ pipeline {
     agent none
     environment { 
         CI = 'true'
-        scannerHome = tool 'test'
     }
     stages {
         stage('Build') {
@@ -21,6 +20,9 @@ pipeline {
                 docker {
                     image 'openjdk'
                 }
+            }
+            environment{
+                scannerHome = tool 'test'
             }
             steps{
                 sh 'echo $JAVA_HOME'
