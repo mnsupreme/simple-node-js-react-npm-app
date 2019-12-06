@@ -25,7 +25,7 @@ pipeline {
                 scannerHome = tool 'test'
             }
             steps{
-                sh 'ping 127.0.0.1:9000'
+                sh 'cat /etc/os-release'
                 withSonarQubeEnv('sonar') { 
                     sh "${scannerHome}/bin/sonar-scanner -X"
                 }
