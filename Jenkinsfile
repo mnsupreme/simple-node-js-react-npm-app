@@ -25,7 +25,7 @@ pipeline {
                 scannerHome = tool 'test'
             }
             steps{
-                sh 'echo $JAVA_HOME'
+                sh 'ping 127.0.0.1:9000'
                 withSonarQubeEnv('sonar') { 
                     sh "${scannerHome}/bin/sonar-scanner -X"
                 }
