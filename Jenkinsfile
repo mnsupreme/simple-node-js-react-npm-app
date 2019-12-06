@@ -19,7 +19,6 @@ pipeline {
             agent {
                 docker {
                     image 'openjdk'
-                    args '-p 9000:9000'
                 }
             }
             environment{
@@ -28,7 +27,7 @@ pipeline {
             steps{
                 sh 'echo $JAVA_HOME'
                 withSonarQubeEnv('sonar') { 
-                    sh "${scannerHome}/bin/sonar-scanner"
+                    sh "${scannerHome}/bin/sonar-scanner -X"
                 }
             }
         }
