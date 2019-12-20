@@ -1,0 +1,58 @@
+version: '3'
+services: 
+  jenkins:
+    image: "jenkinsci/blueocean" 
+    user: root
+    container_name: jenkinsci
+    ports: 
+      - "8080:8080"
+      - "5000:5000"
+    networks:
+      static-network:
+        ipv4_address: 172.18.0.3
+    volumes: 
+      - ${HOME}/jenkins:/var/jenkins_home 
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
+  postgres:
+    image: "postgres"
+    container_name: PostGres
+    environment:
+      POSTGRES_DB: sonar
+      POSTGRES_USER: sonar
+      POSTGRES_PASSWORD: sonar
+    networks:
+        static-network:
+          ipv4_address: 172.18.0.2
+  sonarqube:
+    image: "sonarqube"
+    container_name: SonarTest
+    ports:
+      - "9000:9000"
+    volumes:
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_conf:/opt/sonarqube/conf
+      - sonarqube_logs:/opt/sonarqube/logs
+    environment:
+      - "sonar.jdbc.username=sonar"
+      - "sonar.jdbc.password=sonar"
+      - "sonar.jdbc.url=jdbc:postgresql://172.18.0.2/sonar"
+    networks:
+        static-network:
+          ipv4_address: 172.18.0.4
+volumes:
+  sonarqube_extensions:
+    driver: local
+  sonarqube_conf:
+    driver: local
+  sonarqube_logs:
+    driver: local
+networks:
+  static-network:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.18.0.0/16
+
+
+
