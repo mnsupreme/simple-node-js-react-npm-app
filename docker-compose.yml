@@ -22,7 +22,7 @@ services:
       POSTGRES_USER: sonar
       POSTGRES_PASSWORD: sonar
     networks:
-        static-network:
+        static-network: 
           ipv4_address: 172.18.0.2
   sonarqube:
     image: "sonarqube"

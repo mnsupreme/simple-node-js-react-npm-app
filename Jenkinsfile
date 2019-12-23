@@ -27,7 +27,7 @@ pipeline {
             steps{
                 sh 'cat /etc/os-release'
                 withSonarQubeEnv('sonar') { 
-                    sh "${scannerHome}/bin/sonar-scanner -X"
+                    sh "${scannerHome}/bin/sonar-scanner -X --verbose"
                 }
             }
         }
