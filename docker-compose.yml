@@ -17,10 +17,6 @@ services:
   postgres:
     image: "postgres"
     container_name: PostGres
-    environment:
-      POSTGRES_DB: sonar
-      POSTGRES_USER: sonar
-      POSTGRES_PASSWORD: sonar
     networks:
         static-network: 
           ipv4_address: 172.18.0.2
