@@ -1,5 +1,7 @@
 pipeline {
-    agent none
+    agent {
+        label 'master'
+    }
     environment { 
         CI = 'true'
     }
@@ -39,6 +41,7 @@ pipeline {
                 }
             }
             steps {
+                sh 'npm install'
                 sh './jenkins/scripts/test.sh'
             }
         }
@@ -50,6 +53,7 @@ pipeline {
                 }
             }
             steps {
+                sh 'npm install'
                 sh './jenkins/scripts/deliver.sh' 
                 input message: 'Finished using the web site? (Click "Proceed" to continue)' 
                 sh './jenkins/scripts/kill.sh' 
